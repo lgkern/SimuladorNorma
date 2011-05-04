@@ -5,18 +5,27 @@ using System.Text;
 
 namespace CompTheoProgs.Monolithic.SimpleInstructions
 {
-    /*
     class Operation : SimpleInstructions.Instruction
     {
         private string operationID;
         private string nextLabel;
 
-        public string ThenCase
+        public override bool IsTest
+        {
+            get { return false; }
+        }
+
+        public override string Command
+        {
+            get { return operationID; }
+        }
+
+        public override string ThenCase
         {
             get { return nextLabel; }
         }
 
-        public string ElseCase
+        public override string ElseCase
         {
             get { return nextLabel; }
         }
@@ -33,5 +42,4 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
             return nextLabel;
         }
     }
-     */
 }

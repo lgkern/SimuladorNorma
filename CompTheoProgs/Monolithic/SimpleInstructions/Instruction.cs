@@ -14,7 +14,7 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
             get { return label; }
         }
 
-        public abstract string IsTest
+        public abstract bool IsTest
         { get; }
 
         public abstract string Command
