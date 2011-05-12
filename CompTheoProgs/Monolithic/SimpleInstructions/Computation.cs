@@ -13,7 +13,7 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
         public Computation(SimpleInstructions.Program prog, IMachine mach)
         {
             program = prog;
-            currentInstruction = prog.FirstInstruction;
+            currentInstruction = prog.InitialInstruction;
             finished = false;
             result = null;
         }

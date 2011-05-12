@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CompTheoProgs.Monolithic.SimpleInstructions
 {
-    class Operation : SimpleInstructions.Instruction
+    public class Operation : SimpleInstructions.Instruction
     {
         private string operationID;
         private string nextLabel;
@@ -40,6 +40,11 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
         {
             mach.executeOperation(operationID);
             return nextLabel;
+        }
+
+        public override string ToString()
+        {
+            return "faça " + operationID + " vá_para " + nextLabel;
         }
     }
 }

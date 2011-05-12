@@ -11,6 +11,19 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
         private Instruction initial;
         private IDictionary<string, Instruction> instructions;
 
+        public Program(string initialLabel, ICollection<Instruction> instrs)
+        {
+            instructions = new Dictionary<string, Instruction>();
+
+
+            foreach (Instruction i in instrs)
+            {
+                instructions.Add(i.Label, i);
+            }
+
+            initial = instructions[initialLabel];
+        }
+
         public CompTheoProgs.Computation NewComputation(IMachine mach, string input)
         {
             CompTheoProgs.Computation comp;
@@ -26,11 +39,23 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
             get { return initial; }
         }
 
-        public IDictionary<string, Instruction> Instructions
+        public IDictionary<string, SimpleInstructions.Instruction> Instructions
         {
             get { return instructions; }
         }
 
-        public Instruction FirstInstruction { get; set; }
+        public override string ToString()
+        {
+            String result = "";
+            List<SimpleInstructions.Instruction> insts = instructions.Values.ToList();
+            insts.Sort();
+
+            foreach (SimpleInstructions.Instruction i in insts)
+            {
+                result += i.ToString() + "\n";
+            }
+
+            return result;
+        }
     }
 }

@@ -31,6 +31,11 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
             label = labl;
         }
 
+        public override string ToString()
+        {
+            throw new NotImplementedException();
+        }
+
         public abstract string ExecuteToNextInstruction(IMachine mach);
     }
 }

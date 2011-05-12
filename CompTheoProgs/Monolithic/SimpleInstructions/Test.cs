@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CompTheoProgs.Monolithic.SimpleInstructions
 {
-    class Test : SimpleInstructions.Instruction
+    public class Test : SimpleInstructions.Instruction
     {
         private string testID;
         private string thenCase;
@@ -44,6 +44,11 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
                 return thenCase;
             else
                 return elseCase;
+        }
+
+        public override string ToString()
+        {
+            return "se " + testID + " então vá_para " + thenCase + " senão vá_para " + elseCase;
         }
     }
 }
