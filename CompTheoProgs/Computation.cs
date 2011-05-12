@@ -94,16 +94,46 @@ namespace CompTheoProgs
             return i;
         }
 
-        /*  Abstract method for running a step.
-         * Each subclass must implement this since each
-         * kind of program executes differently.
+        /*  Template method for running a step.
          * 
-         *  Throws an EndOfComputationException if
-         * called after the computation has finished.
+         *  Subclasses must define the method ExecuteSingleStep
+         * for this to work.
+         * 
+         *  There are also two hooks:
+         *   - StepWhenFinishedHook
+         *   - EndOfComputationHook
          */
-        public abstract void RunStep();
+        public void RunStep()
+        {
+            bool finishedAfterExecution;
 
+            // Must not run step if already finished
+            if (Finished)
+            {
+                StepWhenFinishedHook();
+                throw new EndOfComputationException();
+            }
 
+            finishedAfterExecution = ExecuteSingleStep();
+
+            // If the computation ended, sets the result
+            if (finishedAfterExecution)
+            {
+                EndOfComputationHook();
+                SetResult(machine.GetValue());
+            }
+        }
+
+        /* Abstract method for processing the execution of
+         * a single step, different for each kind of program.
+         * 
+         * Returns true if running step caused the computation to end
+         */
+        protected abstract bool ExecuteSingleStep();
+
+        // Hooks for the RunStep template method
+        protected virtual void StepWhenFinishedHook() { }
+        protected virtual void EndOfComputationHook() { }
 
         /*
          *  Methods for the observer pattern
@@ -155,6 +185,9 @@ namespace CompTheoProgs
         }
     }
 
+    /* The exception class for when running a computation 
+     * is asked after it has ended
+     */
     [Serializable()]
     public class EndOfComputationException : System.Exception
     {

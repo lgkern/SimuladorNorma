@@ -43,7 +43,7 @@ namespace CompTheoProgs
                     new Iterative.Operation("ad_Y"),
                     new Iterative.Operation("sub_X")));
 
-            instrs.Add(new Monolithic.SimpleInstructions.Test("1", "zero_X", "0", "2"));
+            instrs.Add(new Monolithic.SimpleInstructions.Test("1", "X_zero", "0", "2"));
             instrs.Add(new Monolithic.SimpleInstructions.Operation("2", "ad_Y", "3"));
             instrs.Add(new Monolithic.SimpleInstructions.Operation("3", "sub_X", "1"));
 
@@ -58,16 +58,16 @@ namespace CompTheoProgs
                 Console.ReadKey(true);
                 comp.RunStep();
             }
-            /*
+            
             mach = new Norma.Machine();
             comp = prog2.NewComputation(mach, "2");
+            view = new ComputationViewer(comp);
 
             while (!comp.Finished)
             {
                 Console.ReadKey(true);
                 comp.RunStep();
             }
-             */
 
             Console.ReadKey(true);
         }

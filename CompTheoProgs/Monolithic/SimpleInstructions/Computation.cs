@@ -27,17 +27,23 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
         }
 
         // Runs a single instruction
-        public override void RunStep()
+        protected override bool ExecuteSingleStep()
         {
-            if (Finished)
-                throw new EndOfComputationException("Cannot execute computation step after it has finished.");
-          
-            currentInstruction = program.Instructions[ currentInstruction.ExecuteToNextInstruction(machine) ];
+            string nextLabel;
 
-            if (currentInstruction == null)
+            nextLabel = currentInstruction.ExecuteToNextInstruction(machine);
+            AddStep(nextLabel, machine.CurrentState);
+
+            try
             {
-                SetResult(machine.GetValue());
+                currentInstruction = program.Instructions[nextLabel];
             }
+            catch (KeyNotFoundException)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

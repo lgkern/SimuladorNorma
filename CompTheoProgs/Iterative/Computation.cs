@@ -32,11 +32,8 @@ namespace CompTheoProgs.Iterative
          * Such execution is delegated from here to the Composition class, and there
          * to each program class.
          */
-        public override void RunStep()
+        protected override bool ExecuteSingleStep()
         {
-            if (Finished)
-                throw new EndOfComputationException("Cannot run steps after the computation ended");
-
             // Delegates the execution to the composition class
             currentProgram.RunComputationStep(machine);
             AddStep(currentProgram.ToString(), machine.CurrentState);
@@ -46,8 +43,10 @@ namespace CompTheoProgs.Iterative
              */
             if (currentProgram.Subprograms.Count == 1)
             {
-                SetResult(machine.GetValue());
+                return true;
             }
+
+            return false;
         }
     }
 }
