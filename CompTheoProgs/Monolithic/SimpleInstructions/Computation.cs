@@ -21,7 +21,7 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
         public Computation(SimpleInstructions.Program prog, IMachine mach) : base(mach)
         {
             program = prog;
-            currentInstruction = prog.FirstInstruction;
+            currentInstruction = prog.InitialInstruction;
 
             AddStep(currentInstruction.Label, mach.CurrentState);
         }
