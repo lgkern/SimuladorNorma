@@ -47,7 +47,7 @@ namespace CompTheoProgs
             instrs.Add(new Monolithic.SimpleInstructions.Operation("2", "ad_Y", "3"));
             instrs.Add(new Monolithic.SimpleInstructions.Operation("3", "sub_X", "1"));
 
-            prog2 = new Monolithic.SimpleInstructions.Program("1", instrs);
+            prog2 = new Monolithic.SimpleInstructions.Program(instrs, "1");
 
             comp = prog1.NewComputation(mach, "2");
             view = new ComputationViewer(comp);

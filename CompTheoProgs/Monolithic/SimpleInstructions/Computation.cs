@@ -5,30 +5,38 @@ using System.Text;
 
 namespace CompTheoProgs.Monolithic.SimpleInstructions
 {
+    /*  A computation for monolithic programs.
+     * 
+     *  Runs one instruction on each step. 
+     *  Uses the labels to identify each program state
+     */
     class Computation : CompTheoProgs.Computation
     {
         private Instruction currentInstruction;
         private SimpleInstructions.Program program;
 
-        public Computation(SimpleInstructions.Program prog, IMachine mach)
+        /*  Sets the current instruction to the first one, adds 
+         * a step for the initial state of execution.
+         */
+        public Computation(SimpleInstructions.Program prog, IMachine mach) : base(mach)
         {
             program = prog;
             currentInstruction = prog.InitialInstruction;
-            finished = false;
-            result = null;
+
+            AddStep(currentInstruction.Label, mach.CurrentState);
         }
 
+        // Runs a single instruction
         public override void RunStep()
         {
-            if (finished)
+            if (Finished)
                 throw new EndOfComputationException("Cannot execute computation step after it has finished.");
           
             currentInstruction = program.Instructions[ currentInstruction.ExecuteToNextInstruction(machine) ];
 
             if (currentInstruction == null)
             {
-                finished = true;
-                result = machine.GetValue();
+                SetResult(machine.GetValue());
             }
         }
     }
