@@ -52,4 +52,16 @@ namespace CompTheoProgs
         protected InvalidMachineInstructionException(System.Runtime.Serialization.SerializationInfo info,
             System.Runtime.Serialization.StreamingContext context) { }
     }
+
+    [Serializable()]
+    public class InvalidMachineValueException : Exception
+    {
+        public InvalidMachineValueException() : base() { }
+        public InvalidMachineValueException(string message) : base(message) { }
+        public InvalidMachineValueException(string message, System.Exception inner) : base(message, inner) { }
+
+        // A constructor is necessary for serialization, whatever that is
+        protected InvalidMachineValueException(System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) { }
+    }
 }

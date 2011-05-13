@@ -96,8 +96,11 @@ namespace CompTheoProgs
 
         /*  Template method for running a step.
          * 
-         *  Subclasses must define the method ExecuteSingleStep
-         * for this to work.
+         *  Throws an EnfOfComputationException when
+         * called after the computation has ended.
+         * 
+         *  Subclasses must define the method 
+         * 'ExecuteSingleStep' for this to work.
          * 
          *  There are also two hooks:
          *   - StepWhenFinishedHook
