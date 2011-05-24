@@ -45,7 +45,7 @@ namespace CompTheoProgs.Norma
         {
             string result = "{ ";
 
-            foreach (string k in this.Keys)
+            foreach (string k in registers.Keys)
             {
                 result += k + ":" + this[k] + ", ";
             }
