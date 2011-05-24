@@ -1,42 +1,42 @@
 # SimuladorNorma
 
-Esse é o projeto de um simulador da execução
-e calculador de equivalência de programas
-para a máquina NORMA, de acordo com as definições
+Esse Ã© o projeto de um simulador da execuÃ§Ã£o
+e calculador de equivalÃªncia de programas
+para a mÃ¡quina NORMA, de acordo com as definiÃ§Ãµes
 e a sintaxe do livro do Prof. Tiaraju Diverio.
 
-## Modelo lógico
+## Modelo lÃ³gico
 
-Há três entidades abstratas utilizadas na implementação:
+HÃ¡ trÃªs entidades abstratas utilizadas na implementaÃ§Ã£o:
 Machine, Program e Computation. Para generalizar ao
-máximo o código, aumentando as possibilidades de reutilização,
-a maior parte das informações passadas a essas entidades
-são strings que devem então ser parseadas.
+mÃ¡ximo o cÃ³digo, aumentando as possibilidades de reutilizaÃ§Ã£o,
+a maior parte das informaÃ§Ãµes passadas a essas entidades
+sÃ£o strings que devem entÃ£o ser parseadas.
 
-Machine é a implementação da máquina, baseada na sua 
-definição formal.
+Machine Ã© a implementaÃ§Ã£o da mÃ¡quina, baseada na sua 
+definiÃ§Ã£o formal.
 
-Program é um programa em si, de diversos tipos possíveis.
-A única restrição para todos os tipos é que, dada uma
-máquina e um valor de entrada, ele consiga gerar uma
+Program Ã© um programa em si, de diversos tipos possÃ­veis.
+A Ãºnica restriÃ§Ã£o para todos os tipos Ã© que, dada uma
+mÃ¡quina e um valor de entrada, ele consiga gerar uma
 Computation correspondente. 
 
-Parte da execução específica para um tipo de programa 
+Parte da execuÃ§Ã£o especÃ­fica para um tipo de programa 
 pode (e deve) ser definida nas suas classes, assim
 se utiliza polimorfismo para abstrair a estrutura do
-programa durante sua execução.
+programa durante sua execuÃ§Ã£o.
 
-Computation é encarregada do controle da execução do
+Computation Ã© encarregada do controle da execuÃ§Ã£o do
 programa, mantendo um registro de todos os estados
 atingidos e do resultado obtido no final. Implementa
-o padrão de Observador.
+o padrÃ£o de Observador.
 
-### Máquina
+### MÃ¡quina
 
-Definida genericamente na interface IMachine, é
-baseada na definição formal.
+Definida genericamente na interface IMachine, Ã©
+baseada na definiÃ§Ã£o formal.
 
-O conjunto de valores aceito pela memória é definido
-de maneira implícita: a única maneira de ver o estado
-atual é pedindo uma representação em string (para uma
-máquina genérica).
+O conjunto de valores aceito pela memÃ³ria Ã© definido
+de maneira implÃ­cita: a Ãºnica maneira de ver o estado
+atual Ã© pedindo uma representaÃ§Ã£o em string (para uma
+mÃ¡quina genÃ©rica).
