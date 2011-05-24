@@ -49,17 +49,31 @@ namespace CompTheoProgs
 
             prog2 = new Monolithic.SimpleInstructions.Program(instrs, "1");
 
+            Console.Write(prog1);
+            Console.WriteLine();
+            Console.Write(prog1.toSimpleInstructions());
+            Console.WriteLine();
+            Console.Write(prog2);
+            Console.WriteLine();
+
             comp = prog1.NewComputation(mach, "2");
             view = new ComputationViewer(comp);
-            
             
             while (!comp.Finished)
             {
                 Console.ReadKey(true);
                 comp.RunStep();
             }
+
+            comp = prog1.toSimpleInstructions().NewComputation(mach, "2");
+            view = new ComputationViewer(comp);
+
+            while (!comp.Finished)
+            {
+                Console.ReadKey(true);
+                comp.RunStep();
+            }
             
-            mach = new Norma.Machine();
             comp = prog2.NewComputation(mach, "2");
             view = new ComputationViewer(comp);
 

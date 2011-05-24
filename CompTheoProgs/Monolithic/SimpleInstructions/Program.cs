@@ -23,7 +23,7 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
          * label for the first one. The label MUST identify one of the
          * given instructions, or else an exception will be raised.
          */
-        public Program(ICollection<Instruction> instructs, string initialLabel)
+        public Program(IEnumerable<Instruction> instructs, string initialLabel)
         {
             instructions = new Dictionary<string, Instruction>();
 

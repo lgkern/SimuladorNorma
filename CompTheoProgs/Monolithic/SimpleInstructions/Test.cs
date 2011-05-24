@@ -48,7 +48,7 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
 
         public override string ToString()
         {
-            return "se " + testID + " então vá_para " + thenCase + " senão vá_para " + elseCase;
+            return label + ":\tse " + testID + " então vá_para " + thenCase + " senão vá_para " + elseCase;
         }
     }
 }
