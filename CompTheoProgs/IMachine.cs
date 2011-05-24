@@ -34,7 +34,10 @@ namespace CompTheoProgs
          * if given an invalid value for this machine.
          */
         void PutValue(string input);
+        void PutValues(IList<string> input);
         string GetValue();
+        IList<string> GetValues();
+        IList<string> GetValues(int num);
 
         // A string representation of the current state.
         string CurrentState

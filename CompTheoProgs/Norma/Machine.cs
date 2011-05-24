@@ -99,8 +99,9 @@ namespace CompTheoProgs.Norma
         }
 
         /* Input function: must receive a string representation
-         * of a natural number. Initializes all registers on zero,
-         * then assigns the given value to register 'X'.
+         * of a natural number (or a list of them). Initializes 
+         * all registers on zero, then assigns the given value 
+         * to register 'X'.
          */
         public void PutValue(string input)
         {
@@ -110,7 +111,7 @@ namespace CompTheoProgs.Norma
             {
                 value = Convert.ToUInt32(input);
             }
-            catch (Exception)
+            catch (FormatException)
             {
                 throw new InvalidMachineValueException();
             }
@@ -119,20 +120,79 @@ namespace CompTheoProgs.Norma
             registers["X"] = value;
         }
 
+        public void PutValues(IList<string> values)
+        {
+            int i;
+
+            // Does nothing if given no values
+            if ( values.Count < 0 )
+                return;
+
+            // Puts the first value
+            PutValue(values[0]);
+
+            // Puts the remaining values
+            i = 1;
+            foreach (string s in values.Skip(1))
+            {
+                try
+                {
+                    registers["X" + i.ToString()] = Convert.ToUInt32(s);
+                }
+                catch (FormatException)
+                {
+                    throw new InvalidMachineValueException();
+                }
+            }
+        }
+
         /* Output function: returns the string representation
          * of the value of register Y.
          */
         public string GetValue()
         {
-            try
+            return registers["Y"].ToString();
+        }
+
+        public IList<string> GetValues()
+        {
+            int i;
+            string regName;
+            IList<string> values = new List<string>();
+
+            // Always uses the register 'Y'
+            values.Add(GetValue());
+
+            // Uses all 'Yi' until some has undefined value
+            i = 1;
+            regName = "Y"+i.ToString();
+            while (registers.IsDefined(regName))
             {
-                return registers["Y"].ToString();
+                values.Add(registers[regName].ToString());
+                i++;
+                regName = "Y" + i.ToString();
             }
-            catch (KeyNotFoundException)
+
+            return values;
+        }
+
+        public IList<string> GetValues(int num)
+        {
+            int i;
+            uint val;
+            IList<string> values = new List<string>();
+
+            // Always uses the register 'Y'
+            values.Add(GetValue());
+
+            // Uses the other num-1 registers
+            for (i = 1; i < num; i++)
             {
-                registers["Y"] = 0;
-                return "0";
+                val = registers["Y" + i.ToString()];
+                values.Add(val.ToString());
             }
+
+            return values;
         }
 
         /* String representation of current state

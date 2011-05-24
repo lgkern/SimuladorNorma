@@ -45,7 +45,7 @@ namespace CompTheoProgs.Norma
         {
             string result = "{ ";
 
-            foreach (string k in this.Keys)
+            foreach (string k in registers.Keys)
             {
                 result += k + ":" + this[k] + ", ";
             }
@@ -53,6 +53,19 @@ namespace CompTheoProgs.Norma
             return result.Substring(0, result.Length-2) + " }";
         }
 
+        // Returns true if the given key has a value, false otherwise
+        public bool IsDefined(string key)
+        {
+            try
+            {
+                uint i = registers[key];
+            }
+            catch (KeyNotFoundException)
+            {
+                return false;
+            }
+            return true;
+        }
 
     }
 }
