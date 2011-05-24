@@ -44,7 +44,7 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
 
         public override string ToString()
         {
-            return "faça " + operationID + " vá_para " + nextLabel;
+            return label + ":\tfaça " + operationID + " vá_para " + nextLabel;
         }
     }
 }

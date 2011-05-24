@@ -20,7 +20,7 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
      *  returning the next label to be executed, which is done
      *  differently for each subclass.
      */
-    public abstract class Instruction
+    public abstract class Instruction : IComparable<Instruction>
     {
         // The label, common to all instructions
         protected string label;
@@ -42,5 +42,8 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
 
         // Execution is done differently for tests and ops
         public abstract string ExecuteToNextInstruction(IMachine mach);
+
+        // Comparison between operations is the comparison of its labels
+        public int CompareTo(Instruction other) { return this.label.CompareTo(other.label); }
     }
 }
