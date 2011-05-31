@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CompTheoProgs.Monolithic.SimpleInstructions;
+using Pretty;
 
 namespace CompTheoProgs.Iterative
 {
@@ -19,8 +20,20 @@ namespace CompTheoProgs.Iterative
      *   May be directly converted to a monolithic, 
      *  simple instructions program.
      */
-    public abstract class Program : IProgram
+    public abstract class Program : IProgram, IPrettyfiable
     {
+        // The default final label for a generated monolithic program
+        public const string defaultFinalLabel = "0";
+
+        // The strings for parts of the programs
+        public const string emptyStr = "✓",
+                            whileStr = "enquanto",
+                            untilStr = "até",
+                            doStr = "faça",
+                            ifStr = "se",
+                            thenStr = "então",
+                            elseStr = "senão";
+
         // Creates a computation for the current program
         public CompTheoProgs.Computation NewComputation(IMachine mach, string input) 
         {
@@ -41,6 +54,18 @@ namespace CompTheoProgs.Iterative
                 initial = "1";
 
             return new Monolithic.SimpleInstructions.Program(instructs, initial);
+        }
+
+        /*  Creates a Doc for pretty-printing
+         * the current program.
+         */
+        public abstract Doc ToDoc();
+
+        /*  Creates a one-line string
+         */
+        public override string ToString()
+        {
+            return ToDoc().Flat();
         }
 
         // Returns the number of instructions for the equivalent monolithic program

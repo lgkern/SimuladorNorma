@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CompTheoProgs.Monolithic.SimpleInstructions;
+using Pretty;
 
 namespace CompTheoProgs.Iterative
 {
@@ -42,20 +43,11 @@ namespace CompTheoProgs.Iterative
             subprograms = programs;
         }
 
-        /* Creates a string from the composition on a single line.
+        /* Creates a Doc from the composition
          */
-        public override string ToString()
+        public override Doc ToDoc()
         {
-            string result;
-            result = "( ";
-
-            foreach (Program p in subprograms)
-            {
-                result += p.ToString();
-                result += "; ";
-            }
-
-            return result.Substring(0, result.Length-2) + " )";
+            return PrettyPrinter.fromDocList("(", subprograms, ";", ")");
         }
 
         /*  The number of instructions required for a composition is

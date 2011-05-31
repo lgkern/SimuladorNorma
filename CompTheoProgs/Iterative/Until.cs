@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CompTheoProgs.Monolithic.SimpleInstructions;
+using Pretty;
 
 namespace CompTheoProgs.Iterative
 {
@@ -23,12 +24,15 @@ namespace CompTheoProgs.Iterative
             subprogram = prg;
         }
 
-        /* Creates a string representation for the
-         * current program
+        /* Creates a Doc for pretty-printing
+         * the current program
          */
-        public override string ToString()
+        public override Doc ToDoc()
         {
-            return "( até " + testID + " faça " + subprogram.ToString() + " )";
+            Doc untilPart = Doc.text(untilStr + " " + testID);
+            Doc doPart = Doc.text(doStr + " ") + subprogram.ToDoc().Indent(doStr.Count() + 1);
+
+            return PrettyPrinter.bracket("(", untilPart + Doc.line + doPart, ")", 2);
         }
 
 

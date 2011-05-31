@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CompTheoProgs.Monolithic.SimpleInstructions;
+using Pretty;
 
 namespace CompTheoProgs.Iterative
 {
@@ -12,25 +13,19 @@ namespace CompTheoProgs.Iterative
      * 
      *  Uses the default constructor.
      */
-    class Empty : Program
+    public class Empty : Program
     {
-        // The textual representation of the empty program:
-        public const string TextRepr = "✓";
 
         /*  Executes one step for (✓; R), by doing nothing and
          * and generating R as the next program to be ran.
          */
         internal override IList<Program> EvalAndGetProgramsToPrepend(IMachine mach)
-        {
-            return new List<Program>();
-        }
+        { return new List<Program>(); }
 
         /* Returns the number of instructions required for this program: 0
          */
         internal override int InstructionCount
-        {
-            get { return 0; }
-        }
+        { get { return 0; } }
 
         /*  Generates an (empty) enumeration for the instructions
          * necessary for running this program: none at all.
@@ -43,9 +38,13 @@ namespace CompTheoProgs.Iterative
         /* Returns a string representation for this program.
          */
         public override string ToString()
-        {
-            return TextRepr;
-        }
+        { return emptyStr; }
+
+        /* Returns a Doc for pretty-printing
+         * this program
+         */
+        public override Doc ToDoc()
+        { return Doc.text(emptyStr); }
 
     }
 }
