@@ -23,6 +23,11 @@ namespace CompTheoProgs.Iterative
             opID = ID;
         }
 
+        /* An operation is never empty
+         */
+        public override bool IsEmpty
+        { get { return false; } }
+
         /* Generates a string representation
          * for the current program
          */

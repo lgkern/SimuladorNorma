@@ -28,6 +28,11 @@ namespace CompTheoProgs.Iterative
             elseProg = elseCase;
         }
 
+        /* A test is empty if both cases are empty
+         */
+        public override bool IsEmpty
+        { get { return thenProg.IsEmpty && elseProg.IsEmpty; } }
+
         /* Creates a Doc for pretty-printing
          * the current program.
          */
@@ -53,27 +58,55 @@ namespace CompTheoProgs.Iterative
          */
         internal override IEnumerable<Monolithic.SimpleInstructions.Instruction> makeInstructions(int currentLabel, string endLabel)
         {
-            IEnumerable<Instruction> composition;
-            IList<Instruction> single = new List<Instruction>();
-            IEnumerable<Instruction> partial;
-            Instruction test;
+            // If this operation is empty, throw an exception
+            if (IsEmpty)
+                throw new System.InvalidOperationException("Can't generate instructions from an empty program.");
 
-            int thenLabel = currentLabel + 1;
-            int elseLabel = currentLabel + 1 + thenProg.InstructionCount;
+            // Generates instructions from the thenProg
+            IEnumerable<Instruction> thenCase;
+            string thenLabel;
+            int lastThenLabel;
+
+            if (thenProg.IsEmpty)
+            {
+                thenCase = new List<Instruction>(0);
+                thenLabel = endLabel;
+                lastThenLabel = currentLabel;
+            }
+            else
+            {
+                thenCase = thenProg.makeInstructions(currentLabel + 1, endLabel);
+                thenLabel = (currentLabel + 1).ToString();
+                lastThenLabel = currentLabel + thenProg.InstructionCount;
+            }
+
+            // Generates instructions from the elseProg
+            IEnumerable<Instruction> elseCase;
+            string elseLabel;
+
+            if (elseProg.IsEmpty)
+            {
+                elseCase = new List<Instruction>(0);
+                elseLabel = endLabel;
+            }
+            else
+            {
+                elseCase = elseProg.makeInstructions(lastThenLabel + 1, endLabel);
+                elseLabel = (lastThenLabel + 1).ToString();
+            }
 
             // Generates the test instruction
-            test = new Monolithic.SimpleInstructions.Test(currentLabel.ToString(), testID, thenLabel.ToString(), elseLabel.ToString());
+            Instruction test = new Monolithic.SimpleInstructions.Test(currentLabel.ToString(), testID, thenLabel.ToString(), elseLabel.ToString());
+
+            // Assembles the list of instructions
+            List<Instruction> single = new List<Instruction>(1);
+            IEnumerable<Instruction> result;
+
             single.Add(test);
+            result = single.Concat(thenCase);
+            result = result.Concat(elseCase);
 
-            // Appends the instructions from the thenProg
-            partial = thenProg.makeInstructions(thenLabel, endLabel);
-            composition = single.Concat(partial);
-
-            // Appends the instructions from the elseProg
-            partial = elseProg.makeInstructions(elseLabel, endLabel);
-            composition = composition.Concat(partial);
-
-            return composition;
+            return result;
         }
 
         /* Executes one step for ((se T então P1 senão P2); R), by executing T

@@ -15,6 +15,10 @@ namespace CompTheoProgs.Iterative
      */
     public class Empty : Program
     {
+        /* Empty is, naturally, always empty
+         */
+        public override bool IsEmpty
+        { get { return true; } }
 
         /*  Executes one step for (✓; R), by doing nothing and
          * and generating R as the next program to be ran.
@@ -27,13 +31,10 @@ namespace CompTheoProgs.Iterative
         internal override int InstructionCount
         { get { return 0; } }
 
-        /*  Generates an (empty) enumeration for the instructions
-         * necessary for running this program: none at all.
+        /* Cannot generate instructions for this program.
          */
         internal override IEnumerable<Monolithic.SimpleInstructions.Instruction> makeInstructions(int currentLabel, string endLabel)
-        {
-            return new List<Instruction>();
-        }
+        { throw new System.InvalidOperationException("Can't generate instructions from an empty program."); }
 
         /* Returns a string representation for this program.
          */

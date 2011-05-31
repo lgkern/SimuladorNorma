@@ -24,6 +24,11 @@ namespace CompTheoProgs.Iterative
             subprogram = prg;
         }
 
+        /* A While is never empty
+         */
+        public override bool IsEmpty
+        { get { return false; } }
+
         /* Creates a Doc for pretty-printing
          * the current program
          */
@@ -47,19 +52,30 @@ namespace CompTheoProgs.Iterative
          */
         internal override IEnumerable<Monolithic.SimpleInstructions.Instruction> makeInstructions(int currentLabel, string endLabel)
         {
-            IList<Instruction> single = new List<Instruction>();
-            IEnumerable<Instruction> partial;
-            Instruction test;
+            // Generates the repeated instructions
+            IEnumerable<Instruction> subInstructions;
+            int subLabel;
 
-            int subprogLabel = currentLabel + 1;
+            if (subprogram.IsEmpty)
+            {
+                // Just goes back to the test instruction
+                subLabel = currentLabel;
+                subInstructions = new List<Instruction>(1);
+            }
+            else
+            {
+                // Generates the subprogram leading back to the test
+                subLabel = currentLabel + 1;
+                subInstructions = subprogram.makeInstructions(subLabel, currentLabel.ToString());
+            }
 
             // Generates the test instruction
-            test = new Monolithic.SimpleInstructions.Test(currentLabel.ToString(), testID, subprogLabel.ToString(), endLabel);
+            List<Instruction> single = new List<Instruction>(1);
+            Instruction test = new Monolithic.SimpleInstructions.Test(currentLabel.ToString(), testID, subLabel.ToString(), endLabel);
             single.Add(test);
 
-            // Appends the instructions from the thenProg
-            partial = subprogram.makeInstructions(subprogLabel, currentLabel.ToString());
-            return single.Concat(partial); ;
+            // Returns all instructions
+            return single.Concat(subInstructions);
         }
 
         /* Executes one step for ((enquanto T faça P); R), by executing T and 
