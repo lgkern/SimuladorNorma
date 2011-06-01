@@ -78,9 +78,7 @@ namespace CompTheoProgs
 
             /* Executes the iterative program
              */
-            Norma.Machine mach = new Norma.Machine();
-            mach.PutValue("2");
-            Computation comp = prog1.NewComputation(mach);
+            Computation comp = prog1.NewComputation(new Norma.Machine("2"));
             ComputationViewer view = new ComputationViewer(comp);
             while (!comp.Finished)
             {
@@ -91,8 +89,7 @@ namespace CompTheoProgs
             /* Executes the monolithic program
              * created from the iterative one
              */
-            mach.PutValue("2");
-            comp = prog1.toSimpleInstructions().NewComputation(mach);
+            comp = prog1.toSimpleInstructions().NewComputation(new Norma.Machine("2"));
             view = new ComputationViewer(comp);
             while (!comp.Finished)
             {
@@ -103,8 +100,7 @@ namespace CompTheoProgs
             /* Executes the monolithic program
              * created from scratch
              */
-            mach.PutValue("2");
-            comp = prog2.NewComputation(mach);
+            comp = prog2.NewComputation(mach, new Norma.Machine(2));
             view = new ComputationViewer(comp);
             while (!comp.Finished)
             {
