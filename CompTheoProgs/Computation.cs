@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CompTheoProgs
 {
@@ -23,7 +22,8 @@ namespace CompTheoProgs
         /*
          *  Fields and Properties
          */
-        private IList<string> steps;
+        private IList<string> progStates, machStates;
+        private bool firstStateDisplayed;
         protected IMachine machine;
         private string result;
         private ICollection<IComputationObserver> observers;
@@ -31,33 +31,37 @@ namespace CompTheoProgs
         // Public getter for whether or not it has finished
         public bool Finished { get { return result != null; } }
 
-        // Public getter for the result, reuturns null when not finished
-        public string Result { get { return result; } }
+        // Public getter for the machine
+        public IMachine Machine { get { return machine; } }
 
 
 
         /*
          *  Public, common methods
          */
-        // Constructor that initializes internal structures
+        /// <summary>
+        /// Constructor that initializes internal structures. Subclasses must create the first step.
+        /// </summary>
+        /// <param name="mach">The machine to be used as is on the computation</param>
         public Computation(IMachine mach)
         {
             result = null;
-            steps = new List<string>();
+            progStates = new List<string>();
+            machStates = new List<string>();
             observers = new LinkedList<IComputationObserver>();
             machine = mach;
+            firstStateDisplayed = false;
         }
 
-        /*  Creates a string representing the computation,
-         * listing each step already ran.
-         */
+        // Creates a string representing the computation,
+        // listing each step already ran.
         public override string ToString()
         {
             string result = "";
 
-            foreach (string step in steps)
+            for (int i = 0; i < progStates.Count; i++)
             {
-                result += step;
+                result += "( " + progStates[i] + "," + machStates[i] + " )";
                 result += "\n";
             }
 
@@ -70,7 +74,9 @@ namespace CompTheoProgs
          *  Methods for running the computation
          */
         
-        // Runs until finished
+        /// <summary>
+        /// Runs until finished
+        /// </summary>
         public void Run()
         {
             while (!Finished)
@@ -79,9 +85,15 @@ namespace CompTheoProgs
             }
         }
 
-        /*  Runs at most maxSteps (may finish execution before that),
-         * returns the number of steps actually executed.
+        /*  
+         * 
          */
+        /// <summary>
+        /// Runs at most maxSteps (may finish execution before that),
+        /// returns the number of steps actually executed.
+        /// </summary>
+        /// <param name="maxSteps">The maximum number of steps being ran</param>
+        /// <returns></returns>
         public int Run(int maxSteps)
         {
             int i;
@@ -94,12 +106,16 @@ namespace CompTheoProgs
             return i;
         }
 
-        /*  Template method for running a step.
-         * 
-         *  Throws an EnfOfComputationException when
-         * called after the computation has ended.
-         * 
-         *  Subclasses must define the method 
+        /// <summary>
+        /// Runs a single step. 
+        /// Implemented as a template method, so
+        /// the execution itself is defined by 
+        /// each concrete subclass.
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <exception cref="EndOfComputationException">When the computation has already finished.</exception>
+        /*  Subclasses must define the method 
          * 'ExecuteSingleStep' for this to work.
          * 
          *  There are also two hooks:
@@ -108,7 +124,13 @@ namespace CompTheoProgs
          */
         public void RunStep()
         {
-            bool finishedAfterExecution;
+            // Will just display the first state at the first run
+            if (!firstStateDisplayed)
+            {
+                NotifyObserversOfStep(progStates.First(), machStates.First());
+                firstStateDisplayed = true;
+                return;
+            }
 
             // Must not run step if already finished
             if (Finished)
@@ -117,7 +139,8 @@ namespace CompTheoProgs
                 throw new EndOfComputationException();
             }
 
-            finishedAfterExecution = ExecuteSingleStep();
+            // Actually runs the step
+            bool finishedAfterExecution = ExecuteSingleStep();
 
             // If the computation ended, sets the result
             if (finishedAfterExecution)
@@ -127,17 +150,20 @@ namespace CompTheoProgs
             }
         }
 
-        /* Abstract method for processing the execution of
-         * a single step, different for each kind of program.
-         * 
-         * Returns true if running step caused the computation to end
-         */
+        /// <summary>
+        /// Abstract method for processing the execution of
+        /// a single step, different for each kind of program
+        /// </summary>
+        /// <returns>true if running a step caused the computation to end</returns>
         protected abstract bool ExecuteSingleStep();
 
         // Hooks for the RunStep template method
         protected virtual void StepWhenFinishedHook() { }
         protected virtual void EndOfComputationHook() { }
 
+
+
+        
         /*
          *  Methods for the observer pattern
          *   1. Public subscription methods
@@ -154,39 +180,48 @@ namespace CompTheoProgs
             observers.Remove(obs);
         }
 
-        // Adds a step to the computation and notifies observers of it
+        /// <summary>
+        /// Adds a step to the computation and notifies observers of it
+        /// </summary>
+        /// <param name="program">A string representing the current program state.</param>
+        /// <param name="state">A string representing the current machine state.</param>
         protected void AddStep(string program, string state)
         {
-            string step;
-                
-            step = "( " + program + ", " + state + " )";
-            steps.Add(step);
-            NotifyObserversOfStep(step);
+            progStates.Add(program);
+            machStates.Add(state);
+            NotifyObserversOfStep(program, state);
         }
 
-        // Sets the result of the computation and notifies observers of it
+        /// <summary>
+        /// Sets the result of the computation and notifies observers of it
+        /// </summary>
+        /// <param name="result"></param>
         protected void SetResult(string result)
         {
             this.result = result;
-            NotifyObserversOfResult(result);
+            NotifyObserversOfResult();
         }
 
-        private void NotifyObserversOfStep(string step)
+        private void NotifyObserversOfStep(string progState, string machState)
         {
             foreach (IComputationObserver o in observers)
             {
-                o.UpdateStepDone(step);
+                o.UpdateStepDone(progState, machState);
             }
         }
 
-        private void NotifyObserversOfResult(string result)
+        private void NotifyObserversOfResult()
         {
             foreach (IComputationObserver o in observers)
             {
-                o.UpdateResult(result);
+                o.UpdateResult(this);
             }
         }
     }
+
+
+
+
 
     /* The exception class for when running a computation 
      * is asked after it has ended

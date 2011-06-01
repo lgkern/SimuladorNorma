@@ -11,17 +11,17 @@ namespace CompTheoProgs
     {
         public ComputationViewer(Computation comp)
         {
-            comp.AddObserver( (IComputationObserver)this );
+            comp.AddObserver( this );
         }
 
-        public void UpdateStepDone(string step)
+        public void UpdateStepDone(string progState, string machState)
         {
-            Console.WriteLine(step);
+            Console.WriteLine("( " + progState + ", " + machState + " )");
         }
 
-        public void UpdateResult(string result)
+        public void UpdateResult(Computation observed)
         {
-            Console.WriteLine(result);
+            Console.WriteLine(observed.Machine.GetValue());
         }
     }
 
@@ -79,7 +79,8 @@ namespace CompTheoProgs
             /* Executes the iterative program
              */
             Norma.Machine mach = new Norma.Machine();
-            Computation comp = prog1.NewComputation(mach, "2");
+            mach.PutValue("2");
+            Computation comp = prog1.NewComputation(mach);
             ComputationViewer view = new ComputationViewer(comp);
             while (!comp.Finished)
             {
@@ -90,7 +91,8 @@ namespace CompTheoProgs
             /* Executes the monolithic program
              * created from the iterative one
              */
-            comp = prog1.toSimpleInstructions().NewComputation(mach, "2");
+            mach.PutValue("2");
+            comp = prog1.toSimpleInstructions().NewComputation(mach);
             view = new ComputationViewer(comp);
             while (!comp.Finished)
             {
@@ -101,7 +103,8 @@ namespace CompTheoProgs
             /* Executes the monolithic program
              * created from scratch
              */
-            comp = prog2.NewComputation(mach, "2");
+            mach.PutValue("2");
+            comp = prog2.NewComputation(mach);
             view = new ComputationViewer(comp);
             while (!comp.Finished)
             {

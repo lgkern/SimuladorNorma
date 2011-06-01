@@ -35,9 +35,8 @@ namespace CompTheoProgs.Iterative
                             elseStr = "senão";
 
         // Creates a computation for the current program
-        public CompTheoProgs.Computation NewComputation(IMachine mach, string input) 
+        public CompTheoProgs.Computation NewComputation(IMachine mach) 
         {
-            mach.PutValue(input);
             return new Iterative.Computation(this, mach);
         }
 

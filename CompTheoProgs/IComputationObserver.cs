@@ -12,14 +12,18 @@ namespace CompTheoProgs
      */
     public interface IComputationObserver
     {
-        /*  Called when a step is ran, receives a string
-         * representation of the reached program and state
-         */
-        void UpdateStepDone(string step);
-
-        /*  Called when the result is obtained, receives
-         * the result of the machine's output function.
-         */
-        void UpdateResult(string result);
+        /// <summary>
+        /// Called by the computation every time a step is ran.
+        /// </summary>
+        /// <param name="progState">String representation of the current </param>
+        /// <param name="machState">String representation of the current machine state</param>
+        void UpdateStepDone(string progState, string machState);
+        
+        /// <summary>
+        /// Called by the computation when the result is obtained. 
+        /// The result may be looked up on the machine.
+        /// </summary>
+        /// <param name="observed">The computation whose result is ready.</param>
+        void UpdateResult(Computation observed);
     }
 }

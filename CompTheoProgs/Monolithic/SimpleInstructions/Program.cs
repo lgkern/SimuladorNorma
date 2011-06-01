@@ -41,9 +41,8 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
         /* Creates a new computation for the monolithic program.
          * Initializes the machine with the given input value
          */
-        public CompTheoProgs.Computation NewComputation(IMachine mach, string input)
+        public CompTheoProgs.Computation NewComputation(IMachine mach)
         {
-            mach.PutValue(input);
             return new SimpleInstructions.Computation(this, mach);
         }
 
