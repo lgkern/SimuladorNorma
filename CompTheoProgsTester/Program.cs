@@ -100,7 +100,7 @@ namespace CompTheoProgs
             /* Executes the monolithic program
              * created from scratch
              */
-            comp = prog2.NewComputation(mach, new Norma.Machine(2));
+            comp = prog2.NewComputation(new Norma.Machine("2"));
             view = new ComputationViewer(comp);
             while (!comp.Finished)
             {
