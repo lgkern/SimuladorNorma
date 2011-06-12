@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CompTheoProgs.Monolithic.SimpleInstructions;
+using Pretty;
 
 namespace CompTheoProgs.Iterative
 {
@@ -42,20 +43,16 @@ namespace CompTheoProgs.Iterative
             subprograms = programs;
         }
 
-        /* Creates a string from the composition on a single line.
+        /* A composition is empty if all composed progs are too
          */
-        public override string ToString()
+        public override bool IsEmpty
+        { get { return subprograms.All(x => x.IsEmpty); } }
+
+        /* Creates a Doc from the composition
+         */
+        public override Doc ToDoc()
         {
-            string result;
-            result = "( ";
-
-            foreach (Program p in subprograms)
-            {
-                result += p.ToString();
-                result += "; ";
-            }
-
-            return result.Substring(0, result.Length-2) + " )";
+            return PrettyPrinter.fromDocList("(", subprograms, ";", ")");
         }
 
         /*  The number of instructions required for a composition is
@@ -78,23 +75,32 @@ namespace CompTheoProgs.Iterative
          */
         internal override IEnumerable<Monolithic.SimpleInstructions.Instruction> makeInstructions(int currentLabel, string endLabel)
         {
+            // Obtains all non-empty subprograms
+            IEnumerable<Program> nonEmpty = subprograms.Where(p => !p.IsEmpty);
+
+            // In case this is empty: fail miserably
+            if (nonEmpty.Count() == 0)
+                throw new System.InvalidOperationException("Can't generate instructions from an empty program.");
+            
+            // Starts creating the instruction enumerations
             IEnumerable<Instruction> composition = new List<Instruction>();
             IEnumerable<Instruction> partial;
-            int nextLabel = currentLabel;
+            int nextLabel;
 
             /*  Appends all enumerations of instructions from all subprograms, except the last,
              * each ending by leading to the next subprogram's first instruction.
              */
-            foreach (Program p in subprograms.Take(subprograms.Count-1))
+            foreach (Program p in nonEmpty.Take(nonEmpty.Count()-1))
             {
                 nextLabel = currentLabel + p.InstructionCount;
+
                 partial = p.makeInstructions( currentLabel, nextLabel.ToString() );
                 composition = composition.Concat(partial);
                 currentLabel = nextLabel;
             }
 
             // Appends the last subpogram's instructions, leading to endLabel
-            partial = subprograms.Last().makeInstructions(currentLabel, endLabel);
+            partial = nonEmpty.Last().makeInstructions(currentLabel, endLabel);
             composition = composition.Concat(partial);
 
             return composition;

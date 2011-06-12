@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Pretty;
 
 namespace CompTheoProgs.Monolithic.SimpleInstructions
 {
@@ -42,9 +43,12 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
             return nextLabel;
         }
 
-        public override string ToString()
+        public override Doc  makeSpecificDoc()
         {
-            return label + ":\tfaça " + operationID + " vá_para " + nextLabel;
+            Doc doPart = Doc.text(doStr + " " + operationID);
+            Doc gotoPart = Doc.text(gotoStr + " " + nextLabel);
+
+            return (doPart + Doc.line + gotoPart).Group();
         }
     }
 }

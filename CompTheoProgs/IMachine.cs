@@ -19,6 +19,9 @@ namespace CompTheoProgs
      *  The set of values for memory may be private, the
      * only requirement is that a state may be represented
      * as a string.
+     * 
+     *  The machine should also define a constructor taking
+     * input value(s), to ease creation of computations.
      */
     public interface IMachine
     {
@@ -29,20 +32,42 @@ namespace CompTheoProgs
         void executeOperation(string operationID);
         bool executeTest(string testID);
 
+
+
         /*  Input and output functions for the machine,
          * throw an InvalidMachineValueException
          * if given an invalid value for this machine.
          */
+        /// <summary>
+        /// Gives an input value to the machine, to be parsed by it.
+        /// </summary>
+        /// <param name="input">The string representation of a value.</param>
+        /// <exception cref="InvalidMachineValueException">
+        /// When the given string is invalid for the machine</exception>
         void PutValue(string input);
-        void PutValues(IList<string> input);
+
+        /// <summary>
+        /// Gives several input values to the machine, to be parsed by it.
+        /// </summary>
+        /// <param name="input">List of string representation of values.</param>
+        /// <exception cref="InvalidMachineValueException">
+        /// When the given string is invalid for the machine</exception>
+        void PutValues(IEnumerable<string> input);
+        
         string GetValue();
-        IList<string> GetValues();
-        IList<string> GetValues(int num);
+        IEnumerable<string> GetValues();
+        IEnumerable<string> GetValues(int num);
+
+
 
         // A string representation of the current state.
         string CurrentState
         { get; }
     }
+
+
+
+
 
     [Serializable()]
     public class InvalidMachineInstructionException : Exception
