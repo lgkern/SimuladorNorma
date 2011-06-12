@@ -30,11 +30,34 @@ namespace CompTheoProgs.Norma
         private static Regex operRE = new Regex("(ad|sub)_([a-zA-Z0-9]+)", RegexOptions.Compiled);
         private static Regex testRE = new Regex("([a-zA-Z0-9]+)_zero", RegexOptions.Compiled);
 
-        /* Constructor only initializes all registers on zero.
-         */
+        /// <summary>
+        /// Constructor that initializes all registers on zero.
+        /// </summary>
         public Machine()
         {
             registers = new State();
+        }
+
+        /// <summary>
+        /// Constructor that inputs a single value.
+        /// </summary>
+        /// <param name="inputVal">A string representing the value being input.</param>
+        /// <exception cref="InvalidMachineValueException">
+        /// When the input can't be parsed to a natural number.</exception>
+        public Machine(string inputVal): this()
+        { 
+            PutValue(inputVal);
+        }
+
+        /// <summary>
+        /// Constructor that inputs several values.
+        /// </summary>
+        /// <param name="inputVals">Enumeration of strings representing the values being input.</param>
+        /// <exception cref="InvalidMachineValueException">
+        /// When the input can't be parsed to a natural number.</exception>
+        public Machine(IEnumerable<string> inputVals) : this()
+        {
+            PutValues(inputVals);
         }
 
         /* Executes 'ad_X' by incrementing the register X
@@ -111,25 +134,25 @@ namespace CompTheoProgs.Norma
             {
                 value = Convert.ToUInt32(input);
             }
-            catch (FormatException)
+            catch (FormatException inner)
             {
-                throw new InvalidMachineValueException();
+                throw new InvalidMachineValueException("Not a natural number for Norma.", inner);
             }
 
             registers = new State();
             registers["X"] = value;
         }
 
-        public void PutValues(IList<string> values)
+        public void PutValues(IEnumerable<string> values)
         {
             int i;
 
             // Does nothing if given no values
-            if ( values.Count < 0 )
+            if ( values.Count() < 0 )
                 return;
 
             // Puts the first value
-            PutValue(values[0]);
+            PutValue(values.First());
 
             // Puts the remaining values
             i = 1;
@@ -139,9 +162,9 @@ namespace CompTheoProgs.Norma
                 {
                     registers["X" + i.ToString()] = Convert.ToUInt32(s);
                 }
-                catch (FormatException)
+                catch (FormatException inner)
                 {
-                    throw new InvalidMachineValueException();
+                    throw new InvalidMachineValueException("Not a natural number for Norma.", inner);
                 }
             }
         }
@@ -154,7 +177,7 @@ namespace CompTheoProgs.Norma
             return registers["Y"].ToString();
         }
 
-        public IList<string> GetValues()
+        public IEnumerable<string> GetValues()
         {
             int i;
             string regName;
@@ -176,7 +199,7 @@ namespace CompTheoProgs.Norma
             return values;
         }
 
-        public IList<string> GetValues(int num)
+        public IEnumerable<string> GetValues(int num)
         {
             int i;
             uint val;

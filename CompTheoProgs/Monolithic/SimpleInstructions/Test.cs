@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Pretty;
 
 namespace CompTheoProgs.Monolithic.SimpleInstructions
 {
@@ -46,9 +47,13 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
                 return elseCase;
         }
 
-        public override string ToString()
+        public override Doc  makeSpecificDoc()
         {
-            return label + ":\tse " + testID + " então vá_para " + thenCase + " senão vá_para " + elseCase;
+            Doc ifPart = Doc.text(ifStr + " " + testID);
+            Doc thenPart = Doc.text(thenStr + " " + gotoStr + " " + thenCase);
+            Doc elsePart = Doc.text(elseStr + " " + gotoStr + " " + elseCase);
+
+            return (ifPart + Doc.line + thenPart + Doc.line + elsePart).Group();
         }
     }
 }

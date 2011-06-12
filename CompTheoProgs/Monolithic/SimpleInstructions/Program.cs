@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Pretty;
 
 namespace CompTheoProgs.Monolithic.SimpleInstructions
 {
@@ -11,7 +12,7 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
      * any particular order, and a single instruction
      * from it on which the computation starts.
      */
-    public class Program : IProgram
+    public class Program : IProgram, IPrettyfiable
     {
         private Instruction initial;
         private IDictionary<string, Instruction> instructions;
@@ -40,21 +41,26 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
         /* Creates a new computation for the monolithic program.
          * Initializes the machine with the given input value
          */
-        public CompTheoProgs.Computation NewComputation(IMachine mach, string input)
+        public CompTheoProgs.Computation NewComputation(IMachine mach)
         {
-            mach.PutValue(input);
             return new SimpleInstructions.Computation(this, mach);
         }
 
+        // Creates a string representation of the 
         public override string ToString()
         {
-            String result = "";
-            List<SimpleInstructions.Instruction> insts = instructions.Values.ToList();
-            insts.Sort();
+            const int linesize = 80;
+            return PrettyPrinter.prettify(this, linesize);
+        }
 
-            foreach (SimpleInstructions.Instruction i in insts)
+        // Creates a Document for pretty-printing
+        public Doc ToDoc()
+        {
+            Doc result = instructions.Values.First().ToDoc();
+
+            foreach (IPrettyfiable i in instructions.Values.Skip(1))
             {
-                result += i.ToString() + "\n";
+                result += Doc.line + i;
             }
 
             return result;

@@ -13,13 +13,12 @@ namespace CompTheoProgs
      */
     public interface IProgram
     {
-        /*  Creates a computation for the program instance,
-         * on the given machine which receives the given input
-         * value.
-         * 
-         *  May throw an InvalidMachineValueException if
-         * the given input value is invalid for the machine.
-         */
-        Computation NewComputation(IMachine mach, string input);
+        /// <summary>
+        /// Creates a computation for the program instance.
+        /// </summary>
+        /// <param name="mach">The machine used as is on the computation.</param>
+        /// <returns>The computation created.</returns>
+        /// <exception cref="InvalidMachineValueException">When the input is invalid for the machine.</exception>
+        Computation NewComputation(IMachine mach);
     }
 }

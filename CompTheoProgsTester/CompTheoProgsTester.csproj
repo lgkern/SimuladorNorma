@@ -51,6 +51,10 @@
       <Project>{DCE5883F-FE86-4DF4-91E8-73A94812B1BC}</Project>
       <Name>CompTheoProgs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Pretty\Pretty.fsproj">
+      <Project>{0715B6DF-EE62-48A5-A999-1CC4F094C09B}</Project>
+      <Name>Pretty</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

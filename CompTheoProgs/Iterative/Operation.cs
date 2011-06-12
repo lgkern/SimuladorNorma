@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CompTheoProgs.Monolithic.SimpleInstructions;
+using Pretty;
 
 namespace CompTheoProgs.Iterative
 {
@@ -22,12 +23,25 @@ namespace CompTheoProgs.Iterative
             opID = ID;
         }
 
+        /* An operation is never empty
+         */
+        public override bool IsEmpty
+        { get { return false; } }
+
         /* Generates a string representation
          * for the current program
          */
         public override string ToString()
         {
             return opID;
+        }
+
+        /* Creates a Doc for pretty-printing
+         * the corrent program
+         */
+        public override Doc ToDoc()
+        {
+            return Doc.text(opID);
         }
 
         /* Returns the number of instructions required for this program: 1

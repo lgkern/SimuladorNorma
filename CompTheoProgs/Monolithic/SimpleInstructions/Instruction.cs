@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Pretty;
 
 namespace CompTheoProgs.Monolithic.SimpleInstructions
 {
@@ -20,8 +21,16 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
      *  returning the next label to be executed, which is done
      *  differently for each subclass.
      */
-    public abstract class Instruction : IComparable<Instruction>
+    public abstract class Instruction : IComparable<Instruction>, IPrettyfiable
     {
+        /* Some strings used in printing the instructions
+         */
+        public const string doStr = "faça",
+                            ifStr = "se",
+                            thenStr = "então",
+                            elseStr = "senão",
+                            gotoStr = "vá_para";
+
         // The label, common to all instructions
         protected string label;
         public string Label { get { return label; } }
@@ -45,5 +54,22 @@ namespace CompTheoProgs.Monolithic.SimpleInstructions
 
         // Comparison between operations is the comparison of its labels
         public int CompareTo(Instruction other) { return this.label.CompareTo(other.label); }
+
+        // Creates a single-line string from the Doc
+        public override string ToString()
+        {
+            return ToDoc().Flat();
+        }
+
+        // Implementation of the IPrettyfiable interface
+        public abstract Doc makeSpecificDoc();
+        public Doc ToDoc()
+        {
+            const int indent = 3;
+            Doc labelPart = Doc.text(label + ":");
+            Doc restPart = makeSpecificDoc().Indent(indent);
+
+            return (labelPart + Doc.line.Indent(indent) + restPart).Group();
+        }
     }
 }

@@ -62,7 +62,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
+    <None Include="Iterative.cd" />
+    <None Include="SimpleInstructions.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pretty\Pretty.fsproj">
+      <Project>{0715B6DF-EE62-48A5-A999-1CC4F094C09B}</Project>
+      <Name>Pretty</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
